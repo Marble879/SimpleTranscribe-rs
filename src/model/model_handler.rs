@@ -53,7 +53,8 @@ impl ModelHandler {
         model_name: &str,
         path: &str,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let response = reqwest::get("").await?;
+        let base_url = "https://huggingface.co/ggerganov/whisper.cpp/tree/main";
+        let response = reqwest::get(format!("{base_url}/{model_name}.bin?download=true")).await?;
         let mut file = std::fs::File::create(format!("{path}/{model_name}.bin"))?;
         let mut content = std::io::Cursor::new(response.bytes().await?);
         std::io::copy(&mut content, &mut file)?;
@@ -79,5 +80,20 @@ mod tests {
         let result = model_handler::ModelHandler::check_model_exists("src");
         println!("{}", result);
         assert_eq!(result, true);
+    }
+
+    #[test]
+    fn test_setup_directory_happy_case() {
+        let result = model_handler::ModelHandler::setup_directory("models/");
+        assert_eq!(result.is_ok(), true);
+    }
+
+    #[tokio::test]
+    async fn test_download_model_happy_case() {
+        let result = model_handler::ModelHandler::download_model(
+            model::model::Model::Tiny.get_model(),
+            "models/",
+        )
+        .await;
     }
 }

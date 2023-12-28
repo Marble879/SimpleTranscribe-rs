@@ -9,11 +9,11 @@ pub enum Model {
 impl Model {
     pub fn get_model(&self) -> &str {
         match self {
-            Model::Tiny => "tiny",
-            Model::Base => "base",
-            Model::Small => "small",
-            Model::Medium => "medium",
-            Model::Large => "large",
+            Model::Tiny => "ggml-tiny",
+            Model::Base => "ggml-base",
+            Model::Small => "ggml-small",
+            Model::Medium => "ggml-medium",
+            Model::Large => "ggml-large",
         }
     }
 }
