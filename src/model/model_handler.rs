@@ -84,23 +84,35 @@ mod tests {
 
     #[test]
     fn test_setup_directory_happy_case() {
-        let result = model_handler::ModelHandler::setup_directory("models/");
+        let result = model_handler::ModelHandler::setup_directory("test_models/");
         assert_eq!(result.is_ok(), true);
+        let _ = std::fs::remove_dir_all("test_models/");
     }
 
     #[tokio::test]
     async fn test_download_model_happy_case() {
+        fn prep_test_dir() {
+            let path = std::path::Path::new("test_dir/");
+            if !path.exists() {
+                let _ = std::fs::create_dir_all(path);
+            }
+        }
+
+        prep_test_dir();
+
         let _result = model_handler::ModelHandler::download_model(
             model::model::Model::Tiny.get_model(),
-            "models/",
+            "test_dir/",
         )
         .await;
 
-        let is_file_existing = match std::fs::metadata("models/ggml-tiny.bin") {
+        let is_file_existing = match std::fs::metadata("test_dir/ggml-tiny.bin") {
             Ok(_) => true,
             Err(_) => false,
         };
 
         assert_eq!(is_file_existing, true);
+
+        let _ = std::fs::remove_dir_all("test_dir/");
     }
 }
