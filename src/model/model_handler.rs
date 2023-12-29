@@ -6,17 +6,17 @@ struct ModelHandler {
 }
 
 impl ModelHandler {
-    fn new(models_dir: String, model: model::model::Model) -> ModelHandler {
+    fn new(model: model::model::Model, models_dir: String) -> ModelHandler {
         ModelHandler { model, models_dir }
     }
 
-    pub fn setup_model(&self) {
+    pub async fn setup_model(&self) {
         if Self::check_model_exists(&self.models_dir) {
             return;
         }; // verify if the model already exists before downloading
-        Self::setup_directory(&self.models_dir);
+        let _ = Self::setup_directory(&self.models_dir);
         let model_name = self.model.get_model();
-        Self::download_model(model_name, &self.models_dir);
+        let _ = Self::download_model(model_name, &self.models_dir).await;
     }
 
     /// setup the directory to which models will be downloaded.
@@ -59,6 +59,41 @@ impl ModelHandler {
         let mut content = std::io::Cursor::new(response.bytes().await?);
         std::io::copy(&mut content, &mut file)?;
         Ok(())
+    }
+
+    fn try_use_model(&self) {
+        let model_path = format!("{}/{}.bin", self.models_dir, self.model.get_model());
+        let context = whisper_rs::WhisperContext::new_with_params(
+            &model_path,
+            whisper_rs::WhisperContextParameters::default(),
+        )
+        .expect("failed to load model");
+
+        let params =
+            whisper_rs::FullParams::new(whisper_rs::SamplingStrategy::Greedy { best_of: 1 });
+        let audio_data = vec![0_f32; 16000 * 2];
+
+        let mut state = context.create_state().expect("Failed to create state");
+        state
+            .full(params, &audio_data[..])
+            .expect("failed to run model");
+
+        // fetch the results
+        let num_segments = state
+            .full_n_segments()
+            .expect("failed to get number of segments");
+        for i in 0..num_segments {
+            let segment = state
+                .full_get_segment_text(i)
+                .expect("failed to get segment");
+            let start_timestamp = state
+                .full_get_segment_t0(i)
+                .expect("failed to get segment start timestamp");
+            let end_timestamp = state
+                .full_get_segment_t1(i)
+                .expect("failed to get segment end timestamp");
+            println!("[{} - {}]: {}", start_timestamp, end_timestamp, segment);
+        }
     }
 }
 
@@ -114,5 +149,14 @@ mod tests {
         assert_eq!(is_file_existing, true);
 
         let _ = std::fs::remove_dir_all("test_dir/");
+    }
+
+    #[tokio::test]
+    async fn component_test_happy_case() {
+        let tiny_model =
+            model_handler::ModelHandler::new(model::model::Model::Tiny, "models".to_string());
+        tiny_model.setup_model().await;
+
+        tiny_model.try_use_model();
     }
 }
