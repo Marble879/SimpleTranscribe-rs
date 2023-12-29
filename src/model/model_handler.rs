@@ -90,10 +90,17 @@ mod tests {
 
     #[tokio::test]
     async fn test_download_model_happy_case() {
-        let result = model_handler::ModelHandler::download_model(
+        let _result = model_handler::ModelHandler::download_model(
             model::model::Model::Tiny.get_model(),
             "models/",
         )
         .await;
+
+        let is_file_existing = match std::fs::metadata("models/ggml-tiny.bin") {
+            Ok(_) => true,
+            Err(_) => false,
+        };
+
+        assert_eq!(is_file_existing, true);
     }
 }
