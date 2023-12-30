@@ -13,10 +13,7 @@ impl ModelHandler {
     pub async fn setup_model(&self) {
         if Self::check_model_exists(&self.models_dir) {
             return;
-        }; // verify if the model already exists before downloading
-        let _ = Self::setup_directory(&self.models_dir);
-        let model_name = self.model.get_model();
-        let _ = Self::download_model(model_name, &self.models_dir).await;
+        }; // verify if the model already exists before downloading let _ = Self::setup_directory(&self.models_dir); let model_name = self.model.get_model(); let _ = Self::download_model(model_name, &self.models_dir).await;
     }
 
     /// setup the directory to which models will be downloaded.
@@ -28,7 +25,7 @@ impl ModelHandler {
     fn setup_directory(dir: &str) -> Result<(), std::io::Error> {
         let path = std::path::Path::new(dir);
         if !path.exists() {
-            std::fs::create_dir_all(path);
+            let _ = std::fs::create_dir_all(path)?;
         }
         Ok(())
     }
