@@ -53,8 +53,8 @@ impl ModelHandler {
         model_name: &str,
         path: &str,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let base_url = "https://huggingface.co/ggerganov/whisper.cpp/tree/main";
-        let response = reqwest::get(format!("{base_url}/{model_name}.bin?download=true")).await?;
+        let base_url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main";
+        let response = reqwest::get(format!("{base_url}/{model_name}.bin")).await?;
         let mut file = std::fs::File::create(format!("{path}/{model_name}.bin"))?;
         let mut content = std::io::Cursor::new(response.bytes().await?);
         std::io::copy(&mut content, &mut file)?;
