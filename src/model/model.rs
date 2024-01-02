@@ -17,3 +17,20 @@ impl Model {
         }
     }
 }
+
+impl std::str::FromStr for Model {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "tiny" => Ok(Model::Tiny),
+            "base" => Ok(Model::Base),
+            "small" => Ok(Model::Small),
+            "medium" => Ok(Model::Medium),
+            "large" => Ok(Model::Large),
+            _ => Err(
+                "Invalid model type. Supported types: tiny, base, small, medium, large".to_string(),
+            ),
+        }
+    }
+}

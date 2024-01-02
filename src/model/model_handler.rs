@@ -1,13 +1,20 @@
 use crate::model;
+use std::str::FromStr;
 
-struct ModelHandler {
+pub struct ModelHandler {
     model: model::model::Model, // list of downloaded models
     models_dir: String,         // path to the models directory
 }
 
 impl ModelHandler {
-    fn new(model: model::model::Model, models_dir: String) -> ModelHandler {
-        ModelHandler { model, models_dir }
+    pub fn new(
+        model_name: &str,
+        models_dir: String,
+    ) -> Result<ModelHandler, Box<dyn std::error::Error>> {
+        Ok(ModelHandler {
+            model: model::model::Model::from_str(model_name)?,
+            models_dir,
+        })
     }
 
     pub async fn setup_model(&self) {
