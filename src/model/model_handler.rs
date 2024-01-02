@@ -1,26 +1,25 @@
-use crate::model;
-use std::str::FromStr;
-
 pub struct ModelHandler {
-    model: model::model::Model, // list of downloaded models
-    models_dir: String,         // path to the models directory
+    model_name: String, // list of downloaded models
+    models_dir: String, // path to the models directory
 }
 
 impl ModelHandler {
-    pub fn new(
+    const MODEL_MAP: std::collections::HashMap<&str, &str> = std::collections::HashMap::from([
+        ("tiny", "ggml-tiny"),
+        ("base", "ggml-base"),
+        ("small", "ggml-small"),
+        ("medium", "ggml-medium"),
+        ("large", "ggml-large"),
+    ]);
+
+    pub async fn new(
         model_name: &str,
         models_dir: String,
     ) -> Result<ModelHandler, Box<dyn std::error::Error>> {
         Ok(ModelHandler {
-            model: model::model::Model::from_str(model_name)?,
+            model_name: model_name.to_string().to_lowercase(),
             models_dir,
         })
-    }
-
-    pub async fn setup_model(&self) {
-        if Self::check_model_exists(&self.models_dir) {
-            return;
-        }; // verify if the model already exists before downloading let _ = Self::setup_directory(&self.models_dir); let model_name = self.model.get_model(); let _ = Self::download_model(model_name, &self.models_dir).await;
     }
 
     /// setup the directory to which models will be downloaded.
@@ -104,11 +103,7 @@ mod tests {
 
         prep_test_dir();
 
-        let _result = model_handler::ModelHandler::download_model(
-            model::model::Model::Tiny.get_model(),
-            "test_dir/",
-        )
-        .await;
+        let _result = model_handler::ModelHandler::download_model("tiny", "test_dir/").await;
 
         let is_file_existing = match std::fs::metadata("test_dir/ggml-tiny.bin") {
             Ok(_) => true,
