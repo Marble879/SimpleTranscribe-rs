@@ -25,17 +25,18 @@ impl Whisper {
             self.ctx.create_state().expect("Failed to create state");
         let audio_data = vec![0_f32; 16000 * 2];
 
-        if let Some(whisper_params) = whisper_params {
-            state
-                .full(whisper_params, &audio_data[..])
-                .expect("failed to run model");
+        let params: whisper_rs::FullParams;
+        match whisper_params {
+            Some(whisper_params) => params = whisper_params,
+            None => {
+                params =
+                    whisper_rs::FullParams::new(whisper_rs::SamplingStrategy::Greedy { best_of: 1 })
+            }
         }
-        let params =
-            whisper_rs::FullParams::new(whisper_rs::SamplingStrategy::Greedy { best_of: 1 });
-        state.full(params, &audio_data[..]);
-        //let params =
-        //whisper_rs::FullParams::new(whisper_rs::SamplingStrategy::Greedy { best_of: 1 });
-        //
+
+        state
+            .full(params, &audio_data[..])
+            .expect("failed to run the model");
 
         // fetch the results
         let num_segments = state
@@ -58,16 +59,20 @@ impl Whisper {
     fn create_state() {}
 }
 
+#[cfg(test)]
 mod tests {
     use crate::model::model_handler;
 
     use super::*;
 
+    #[tokio::test]
     async fn component_test_happy_case() {
         // TODO: Make assert the return string after fulfill to do in try_use_model
-        let tiny_model = model_handler::ModelHandler::new("Tiny", "models".to_string()).await;
+        let tiny_model_handler = model_handler::ModelHandler::new("Tiny", "models").await;
+        //tiny_model_handler.await;
 
-        let whisper_wrp = Whisper::new(tiny_model);
+        let whisper_wrp = Whisper::new(tiny_model_handler);
+
         whisper_wrp.transcribe("test.wav", "test.txt", None);
     }
 }

@@ -12,15 +12,24 @@ const MODEL_MAP: phf::Map<&'static str, &'static str> = phf::phf_map! {
 };
 
 impl ModelHandler {
-    pub async fn new(model_name: &str, models_dir: String) -> ModelHandler {
-        ModelHandler {
+    pub async fn new(model_name: &str, models_dir: &str) -> ModelHandler {
+        let model_handler = ModelHandler {
             model_name: MODEL_MAP
                 .get(&model_name.to_lowercase())
                 .copied()
                 .unwrap()
                 .to_string(),
-            models_dir,
+            models_dir: models_dir.to_string(),
+        };
+
+        if model_handler.is_model_existing() {
+            return model_handler;
         }
+
+        let _ = model_handler.setup_directory();
+        let _ = model_handler.download_model().await;
+
+        model_handler
     }
 
     /// setup the directory to which models will be downloaded.
@@ -37,8 +46,8 @@ impl ModelHandler {
         Ok(())
     }
 
-    fn check_model_exists(&self) -> bool {
-        match std::fs::metadata(format!("{}/{}.bin", &self.models_dir, &self.model_name)) {
+    fn is_model_existing(&self) -> bool {
+        match std::fs::metadata(format!("{}/{}.bin", self.models_dir, self.model_name)) {
             Ok(_) => true,
             Err(_) => false,
         }
@@ -54,7 +63,7 @@ impl ModelHandler {
     ///
     /// * `Void` - The model is downloaded to the models directory.
     async fn download_model(&self) -> Result<(), Box<dyn std::error::Error>> {
-        if !self.check_model_exists() {
+        if !self.is_model_existing() {
             self.setup_directory()?;
         }
         let base_url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main";
@@ -66,8 +75,8 @@ impl ModelHandler {
         Ok(())
     }
 
-    pub fn get_model_dir(&self) -> &str {
-        &self.models_dir
+    pub fn get_model_dir(&self) -> String {
+        format!("{}/{}.bin", &self.models_dir, &self.model_name)
     }
 }
 
@@ -79,8 +88,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_check_model_exists_non_existent_path() {
-        let test_model = model_handler::ModelHandler::new("tiny", "test_models/".to_string()).await;
-        let result = test_model.check_model_exists();
+        let test_model = model_handler::ModelHandler::new("tiny", "non-exist/").await;
+        let result = test_model.is_model_existing();
         assert_eq!(result, false);
     }
 
@@ -91,8 +100,8 @@ mod tests {
             let _ = std::fs::create_dir_all(path);
         }
 
-        let test_model = model_handler::ModelHandler::new("tiny", "test_models/".to_string()).await;
-        let result = test_model.check_model_exists();
+        let test_model = model_handler::ModelHandler::new("tiny", "test_models/").await;
+        let result = test_model.is_model_existing();
         assert_eq!(result, true);
     }
 
@@ -103,7 +112,7 @@ mod tests {
             let _ = std::fs::create_dir_all(path);
         }
 
-        let test_model = model_handler::ModelHandler::new("tiny", "test_models/".to_string()).await;
+        let test_model = model_handler::ModelHandler::new("tiny", "test_models/").await;
         let result = test_model.setup_directory();
         assert_eq!(result.is_ok(), true);
         let _ = std::fs::remove_dir_all("test_models/");
@@ -120,7 +129,7 @@ mod tests {
 
         prep_test_dir();
 
-        let model_handler = model_handler::ModelHandler::new("tiny", "test_dir/".to_string()).await;
+        let model_handler = model_handler::ModelHandler::new("tiny", "test_dir/").await;
 
         let _result = model_handler.download_model().await;
 
