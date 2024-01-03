@@ -21,18 +21,18 @@ impl Whisper {
         _output_path: &str,
         whisper_params: Option<whisper_rs::FullParams>,
     ) {
-        let mut state: whisper_rs::WhisperState =
-            self.ctx.create_state().expect("Failed to create state");
+        // TODO: Implment load_audio fn to get audio from audio path.
+        // TODO: Implement transcription to output path.
         let audio_data = vec![0_f32; 16000 * 2];
 
-        let params: whisper_rs::FullParams;
-        match whisper_params {
-            Some(whisper_params) => params = whisper_params,
+        let mut state: whisper_rs::WhisperState =
+            self.ctx.create_state().expect("Failed to create state");
+        let params: whisper_rs::FullParams = match whisper_params {
+            Some(whisper_params) => whisper_params,
             None => {
-                params =
-                    whisper_rs::FullParams::new(whisper_rs::SamplingStrategy::Greedy { best_of: 1 })
+                whisper_rs::FullParams::new(whisper_rs::SamplingStrategy::Greedy { best_of: 1 })
             }
-        }
+        };
 
         state
             .full(params, &audio_data[..])
@@ -55,8 +55,6 @@ impl Whisper {
             println!("[{} - {}]: {}", start_timestamp, end_timestamp, segment);
         }
     }
-
-    fn create_state() {}
 }
 
 #[cfg(test)]
