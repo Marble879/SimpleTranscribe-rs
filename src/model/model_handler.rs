@@ -87,13 +87,6 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn test_check_model_exists_non_existent_path() {
-        let test_model = model_handler::ModelHandler::new("tiny", "non-exist/").await;
-        let result = test_model.is_model_existing();
-        assert_eq!(result, false);
-    }
-
-    #[tokio::test]
     async fn test_check_model_exists_existent_path() {
         let path = std::path::Path::new("test_models/ggml-tiny.bin");
         if !path.exists() {

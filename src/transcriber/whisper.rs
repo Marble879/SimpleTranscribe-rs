@@ -74,5 +74,7 @@ mod tests {
         let whisper_wrp = Whisper::new(tiny_model_handler);
 
         whisper_wrp.transcribe("test.wav", "test.txt", None);
+
+        let _ = std::fs::remove_dir_all("models/");
     }
 }
