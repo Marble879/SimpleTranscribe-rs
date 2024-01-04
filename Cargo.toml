@@ -10,7 +10,7 @@ description = "Audio to text transcription library written in rust that utilizes
 homepage = "https://github.com/Marble879/SimpleTranscribe-rs"
 repository = "https://github.com/Marble879/SimpleTranscribe-rs"
 readme = "README.md" 
-keywords = ["audio", "transcription", "whisper", "openai"]
+keywords = ["audio", "transcription", "whisper", "openai", "transcribe"]
 categories = ["multimedia::audio"]
 exclude = [".github"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
