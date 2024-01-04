@@ -1,5 +1,5 @@
 # SimpleTranscribe-rs 🔈 📖
-An audio to text transcription library written in rust that utilizes [whisper-rs](https://github.com/tazz4843/whisper-rs) bindings.
+An audio to text transcription library written in rust that utilizes [Whisper-rs](https://github.com/tazz4843/whisper-rs) bindings.
 
 ## What is SimpleTranscribe-rs?
 SimpleTranscribe-rs is a library written in Rust with the goal of making audio to text transcription simple for developers. SimpleTranscribe-rs handles different aspects of transcription ranging from automatically downloading required whisper text to speech models, to parsing audio files, allowing developers to incorporate transcription in their projects quickly 🌩️
@@ -23,7 +23,7 @@ To use SimpleTranscribe-rs, simply add it to your project's `cargo.toml`:
 TODO: Add
 ```
 
-Due to the nature of downloading models, it is necessary to await new instantiation of the model handler, and hence an async runtime is required.
+Due to the nature of downloading models, it is necessary to await instantiations of the model handler. Therefore an async runtime is required.
 [Tokio](https://github.com/tokio-rs/tokio) is what is used internally in the library and has also been tested with, and therefore is the recommended runtime for this library.
 
 ## Usage
