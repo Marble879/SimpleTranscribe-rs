@@ -3,7 +3,7 @@ exclude = ["examples/usage_example.rs"]
 
 [package]
 name = "simple_transcribe_rs"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 license = "MIT"
 description = "Audio to text transcription library written in rust that utilizes whisper-rs bindings."
