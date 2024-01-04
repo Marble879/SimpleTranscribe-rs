@@ -2,6 +2,13 @@
 name = "simple_transcribe_rs"
 version = "0.1.0"
 edition = "2021"
+lisence = "MIT"
+description = "Audio to text transcription library written in rust that utilizes whisper-rs bindings."
+homepage = "https://github.com/Marble879/SimpleTranscribe-rs"
+repository = "https://github.com/Marble879/SimpleTranscribe-rs"
+readme = "README.md" 
+keywords = ["audio", "transcription", "whisper", "openai"]
+categories = ["multimedia::audio"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
