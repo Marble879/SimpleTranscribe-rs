@@ -50,6 +50,3 @@ async fn main() {
 
 The snippet can be run via:
 ```cargo run --example usage_example```
-
-## Contribution guidelines
-TODO: Add
