@@ -1,3 +1,1 @@
-mod model;
-mod model_handler;
-
+pub mod model_handler;
