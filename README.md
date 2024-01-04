@@ -38,9 +38,11 @@ use simple_transcribe_rs::transcriber;
 async fn main() {
     let m = model_handler::ModelHandler::new("tiny", "models/").await;
     let trans = transcriber::Transcriber::new(m);
-    let result = trans.transcribe("src/test.mp3", None).unwrap();
+    let result = trans.transcribe("src/test_data/test.mp3", None).unwrap();
     let text = result.get_text();
-    println!("{}", text);
+    let start = result.get_start_timestamp();
+    let end = result.get_end_timestamp();
+    println!("start[{}]-end[{}] {}", start, end, text);
 }
 ```
 
