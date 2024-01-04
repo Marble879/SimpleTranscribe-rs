@@ -2,7 +2,7 @@
 An audio to text transcription library written in rust that utilizes [Whisper-rs](https://github.com/tazz4843/whisper-rs) bindings.
 
 ## What is SimpleTranscribe-rs?
-SimpleTranscribe-rs is a library written in Rust with the goal of making audio to text transcription simple for developers. SimpleTranscribe-rs handles different aspects of transcription ranging from automatically downloading required whisper text to speech models, to parsing audio files, allowing developers to incorporate transcription in their projects quickly 🌩️
+SimpleTranscribe-rs is a library written in Rust with the goal of making audio to text transcription simple for developers. SimpleTranscribe-rs handles different aspects of transcription such as automatically downloading required whisper text to speech models and to parsing audio files. The aim is for developers to be able to incorporate transcription in their projects quickly 🌩️
 
 ## Features
 - Automatically downloads Models that have no already been installed. Supported models:
