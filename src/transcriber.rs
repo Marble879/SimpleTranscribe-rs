@@ -1,33 +1,33 @@
 use crate::audio_parser;
-use crate::model;
+use crate::model_handler;
 
 #[derive(Debug)]
-struct TranscriberOutput {
+pub struct TranscriberOutput {
     start_timestamp: i64,
     end_timestamp: i64,
     text: String,
 }
 
 impl TranscriberOutput {
-    fn get_start_timestamp(&self) -> &i64 {
+    pub fn get_start_timestamp(&self) -> &i64 {
         &self.start_timestamp
     }
 
-    fn get_end_timestamp(&self) -> &i64 {
+    pub fn get_end_timestamp(&self) -> &i64 {
         &self.end_timestamp
     }
 
-    fn get_text(&self) -> &str {
+    pub fn get_text(&self) -> &str {
         &self.text
     }
 }
 
-struct Transcriber {
+pub struct Transcriber {
     ctx: whisper_rs::WhisperContext,
 }
 
 impl Transcriber {
-    pub fn new(model: model::model_handler::ModelHandler) -> Transcriber {
+    pub fn new(model: model_handler::ModelHandler) -> Transcriber {
         Transcriber {
             ctx: whisper_rs::WhisperContext::new_with_params(
                 &model.get_model_dir(),
@@ -40,10 +40,9 @@ impl Transcriber {
     pub fn transcribe(
         &self,
         audio_path: &str,
-        _output_path: &str,
         whisper_params: Option<whisper_rs::FullParams>,
     ) -> Result<TranscriberOutput, Box<dyn std::error::Error>> {
-        let audio_data = audio_parser::audio_parser::parse_audio_file(audio_path);
+        let audio_data = audio_parser::parse_audio_file(audio_path);
 
         let mut state: whisper_rs::WhisperState =
             self.ctx.create_state().expect("Failed to create state");
@@ -88,7 +87,7 @@ impl Transcriber {
 
 #[cfg(test)]
 mod tests {
-    use crate::model::model_handler;
+    use crate::model_handler;
 
     use super::*;
 
@@ -100,7 +99,7 @@ mod tests {
         let whisper_wrp = Transcriber::new(tiny_model_handler);
 
         let result = whisper_wrp
-            .transcribe("src/test.mp3", "test.txt", None)
+            .transcribe("src/test_data/test.mp3", None)
             .unwrap();
         let result_text = result.get_text();
 

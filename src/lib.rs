@@ -1,3 +1,3 @@
 mod audio_parser;
-mod model;
-mod transcriber;
+pub mod model_handler;
+pub mod transcriber;
