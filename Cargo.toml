@@ -1,3 +1,6 @@
+[workspace]
+exclude = ["examples/usage_example.rs"]
+
 [package]
 name = "simple_transcribe_rs"
 version = "0.1.0"
