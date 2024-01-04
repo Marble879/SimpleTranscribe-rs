@@ -20,7 +20,9 @@ SimpleTranscribe-rs is a library written in Rust with the goal of making audio t
 ## Getting started
 To use SimpleTranscribe-rs, simply add it to your project's `cargo.toml`:
 ```
-TODO: Add
+[dependencies]
+simple_transcribe_rs = "1.0.1"
+tokio = { version = "1.35.1", features = ["full"] }
 ```
 
 Due to the nature of downloading models, it is necessary to await instantiations of the model handler. Therefore an async runtime is required.
