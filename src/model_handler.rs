@@ -82,7 +82,7 @@ impl ModelHandler {
 
 #[cfg(test)]
 mod tests {
-    use crate::model::model_handler;
+    use crate::model_handler;
 
     use super::*;
 
