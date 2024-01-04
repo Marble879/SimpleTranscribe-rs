@@ -10,6 +10,7 @@ whisper-rs = "0.10.0"
 reqwest = "0.11.23"
 tokio = {version = "1.35.1", features = ["full"]}
 phf = {version = "0.11.2", features = ["macros"]}
+symphonia = {version = "0.5.3", features=["mp3"]}
 
 [dev-dependencies]
 tempfile = "3.9.0" 
