@@ -1,1 +1,1 @@
-mod whisper;
+mod transcriber;
