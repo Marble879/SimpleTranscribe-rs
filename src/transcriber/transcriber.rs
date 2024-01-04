@@ -1,6 +1,27 @@
 use crate::audio_parser;
 use crate::model;
 
+#[derive(Debug)]
+struct TranscriberOutput {
+    start_timestamp: i64,
+    end_timestamp: i64,
+    text: String,
+}
+
+impl TranscriberOutput {
+    fn get_start_timestamp(&self) -> &i64 {
+        &self.start_timestamp
+    }
+
+    fn get_end_timestamp(&self) -> &i64 {
+        &self.end_timestamp
+    }
+
+    fn get_text(&self) -> &str {
+        &self.text
+    }
+}
+
 struct Transcriber {
     ctx: whisper_rs::WhisperContext,
 }
@@ -21,7 +42,7 @@ impl Transcriber {
         audio_path: &str,
         _output_path: &str,
         whisper_params: Option<whisper_rs::FullParams>,
-    ) -> String {
+    ) -> Result<TranscriberOutput, Box<dyn std::error::Error>> {
         let audio_data = audio_parser::audio_parser::parse_audio_file(audio_path);
 
         let mut state: whisper_rs::WhisperState =
@@ -38,6 +59,8 @@ impl Transcriber {
             .expect("failed to run the model");
 
         let mut transcribed_string = "".to_string();
+        let mut start_timestamp = 0;
+        let mut end_timestamp = 0;
         // fetch the results
         let num_segments = state
             .full_n_segments()
@@ -46,16 +69,20 @@ impl Transcriber {
             let segment = state
                 .full_get_segment_text(i)
                 .expect("failed to get segment");
-            let start_timestamp = state
+            start_timestamp = state
                 .full_get_segment_t0(i)
                 .expect("failed to get segment start timestamp");
-            let end_timestamp = state
+            end_timestamp = state
                 .full_get_segment_t1(i)
                 .expect("failed to get segment end timestamp");
-            println!("[{} - {}]: {}", start_timestamp, end_timestamp, segment);
             transcribed_string.push_str(&segment);
         }
-        transcribed_string
+
+        Ok(TranscriberOutput {
+            start_timestamp,
+            end_timestamp,
+            text: transcribed_string,
+        })
     }
 }
 
@@ -72,9 +99,12 @@ mod tests {
         let tiny_model_handler = model_handler::ModelHandler::new("Tiny", "models").await;
         let whisper_wrp = Transcriber::new(tiny_model_handler);
 
-        let result = whisper_wrp.transcribe("src/test.mp3", "test.txt", None);
+        let result = whisper_wrp
+            .transcribe("src/test.mp3", "test.txt", None)
+            .unwrap();
+        let result_text = result.get_text();
 
-        assert_eq!(expected_result, result);
+        assert_eq!(expected_result, result_text);
 
         let _ = std::fs::remove_dir_all("models/");
     }
