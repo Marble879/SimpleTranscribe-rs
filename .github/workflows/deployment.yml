@@ -22,4 +22,4 @@ jobs:
       - name: dry-run
         run: cargo publish --dry-run --allow-dirty
       - name: publish
-        run: cargo publish
+        run: cargo publish --allow-dirty
