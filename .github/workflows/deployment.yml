@@ -3,7 +3,7 @@ name: Deployment
 on:
   push:
     tags:
-      - '/^v\d+\.\d+\.\d+/'
+      - /^v\d+\.\d+\.\d+/
 
 env:
   CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_TOKEN }}
