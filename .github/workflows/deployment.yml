@@ -16,7 +16,7 @@ jobs:
       - name: bump-cargo-version
         env: 
           RELEASE_TAG: ${{ github.ref }}
-        run: sed -i "s/0.0.0/$VERSION/g" Cargo.toml
+        run: sed -i "s/0.0.0/$RELEASE_TAG/g" Cargo.toml
       - name: dry-run
         run: cargo publish --dry-run --allow-dirty
       - name: publish
