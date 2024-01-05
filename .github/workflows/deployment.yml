@@ -18,7 +18,7 @@ jobs:
           RELEASE_TAG: ${{ github.ref }}
         run: |
           mv Cargo.toml Cargo.toml.orig
-          sed "s/0\\.0\\.0/${RELEASE_TAG##*\/v}/" Cargo.toml.orig >Cargo.toml
+          sed "s/0\\.0\\.0/${RELEASE_TAG##*\/v}/" Cargo.toml
       - name: dry-run
         run: cargo publish --dry-run --allow-dirty
       - name: publish
