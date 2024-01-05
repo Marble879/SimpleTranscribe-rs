@@ -8,27 +8,18 @@ env:
   CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_TOKEN }}
 
 jobs:
-  Bump-cargo:
-    name: bump-cargo
+  Deploy:
+    name: Deploy-Crate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: set-cargo-version
+      - name: bump-cargo-version
         env: 
           RELEASE_TAG: ${{ github.ref }}
         run: |
           mv Cargo.toml Cargo.toml.orig
           sed "s/0\\.0\\.0/${RELEASE_TAG##*\/v}/" Cargo.toml.orig >Cargo.toml
-    
-  
-  publish:
-    name: Deploy-crate
-    runs-on: ubuntu-latest
-    needs: Bump-cargo
-    steps:
-      - uses: actions/checkout@v3
       - name: dry-run
         run: cargo publish --dry-run
       - name: publish
         run: cargo publish
-      
