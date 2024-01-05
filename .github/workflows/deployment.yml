@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: bump-cargo-version
         run: |
-          export VERSION=${{ github.event.release.tag_name }}
+          export VERSION=${{ github.ref }}
           sed -i "s/0.0.0/$VERSION/g" Cargo.toml
       - name: dry-run
         run: cargo publish --dry-run --allow-dirty
