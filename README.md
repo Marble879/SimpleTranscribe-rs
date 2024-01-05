@@ -3,7 +3,7 @@
 An audio to text transcription library written in rust that utilizes [Whisper-rs](https://github.com/tazz4843/whisper-rs) bindings.
 
 ![logo](readme_logo.jpg)
-<img src="readme_logo.jpg" width="3200" height="1200">
+<img src="readme_logo.jpg" width="400" height="400">
 
 ## What is SimpleTranscribe-rs?
 
