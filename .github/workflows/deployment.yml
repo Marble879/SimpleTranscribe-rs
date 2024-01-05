@@ -19,13 +19,12 @@ jobs:
         run: |
           mv Cargo.toml Cargo.toml.orig
           sed "s/0\\.0\\.0/${RELEASE_TAG##*\/v}/" Cargo.toml.orig >Cargo.toml
-          mv Cargo.lock Cargo.lock.orig
-          sed "s/0\\.0\\.0/${RELEASE_TAG##*\/v}/" Cargo.lock.orig >Cargo.lock
     
   
   publish:
     name: Deploy-crate
     runs-on: ubuntu-latest
+    needs: Bump-cargo
     steps:
       - uses: actions/checkout@v3
       - name: dry-run
