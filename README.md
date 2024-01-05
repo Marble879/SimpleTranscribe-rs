@@ -1,24 +1,32 @@
 # SimpleTranscribe-rs 🔈 📖
+
 An audio to text transcription library written in rust that utilizes [Whisper-rs](https://github.com/tazz4843/whisper-rs) bindings.
 
+![logo](readme_logo.jpg)
+<img src="readme_logo.jpg" width="3200" height="1200">
+
 ## What is SimpleTranscribe-rs?
+
 SimpleTranscribe-rs is a library written in Rust with the goal of making audio to text transcription simple for developers. SimpleTranscribe-rs handles different aspects of setting up audio to text transcription, such as automatically downloading required whisper text-to-speech models. The aim is for developers to be able to incorporate transcription in their projects quickly 🌩️
 
 ## Features
+
 - Automatically downloads Models that have no already been installed. Supported models:
-    - Tiny
-    - Base
-    - Small
-    - Medium
-    - Large
+
+  - Tiny
+  - Base
+  - Small
+  - Medium
+  - Large
 
 - Transcribes audio from different file types such as:
   - mp3
-  - wav 
-
+  - wav
 
 ## Getting started
+
 To use SimpleTranscribe-rs, simply add it to your project's `cargo.toml`:
+
 ```
 [dependencies]
 simple_transcribe_rs = "1.0.1"
@@ -29,7 +37,8 @@ Due to the nature of downloading models, it is necessary to await instantiations
 [Tokio](https://github.com/tokio-rs/tokio) is what is used internally in the library and has also been tested with, and therefore is the recommended runtime for this library.
 
 ## Usage
-To use SimpleTranscribe-rs, the model handler first needs to be used to setup and prepare the language model. Afterwards, the transcriber can be used to 
+
+To use SimpleTranscribe-rs, the model handler first needs to be used to setup and prepare the language model. Afterwards, the transcriber can be used to
 convert audio files to text. The following snippet depicts an example of this:
 
 ```rust
@@ -49,4 +58,4 @@ async fn main() {
 ```
 
 The snippet can be run via:
-```cargo run --example usage_example```
+`cargo run --example usage_example`
