@@ -56,8 +56,8 @@ async fn main() {
     // transcribe audio data.
     let trans = transcriber::Transcriber::new(m);
 
-    // The result of a transcription returns a 'Result'. If no error occurs, 
-    // an instance of a struct returned with the values:
+    // The result of a transcription returns (if no error occurs) an instance of a struct with
+    // the values:
         // text - The transcribed text
         // start - The starting timestamp
         // end - The ending timestamp
