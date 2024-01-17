@@ -48,8 +48,8 @@ use simple_transcribe_rs::transcriber;
 async fn main() {
     
     // Creates a new model handler. The model handler takes care of downloading the specified
-    // model (parameter 2) if it does not exist, and storing it in the specified 
-    // directory (second parameter)
+    // model (parameter 1) if it does not exist, and storing it in the specified 
+    // directory (parameter 2)
     let m = model_handler::ModelHandler::new("tiny", "models/").await; 
 
     // A new transcriber is then made. The transcriber utilizes the model handler to 
