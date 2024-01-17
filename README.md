@@ -46,12 +46,26 @@ use simple_transcribe_rs::transcriber;
 
 #[tokio::main]
 async fn main() {
-    let m = model_handler::ModelHandler::new("tiny", "models/").await;
+    
+    // Creates a new model handler. The model handler takes care of downloading the specified
+    // model (parameter 2) if it does not exist, and storing it in the specified 
+    // directory (second parameter)
+    let m = model_handler::ModelHandler::new("tiny", "models/").await; 
+
+    // A new transcriber is then made. The transcriber utilizes the model handler to 
+    // transcribe audio data.
     let trans = transcriber::Transcriber::new(m);
+
+    // The result of a transcription returns a 'Result'. If no error occurs, 
+    // an instance of a struct returned with the values:
+        // text - The transcribed text
+        // start - The starting timestamp
+        // end - The ending timestamp
     let result = trans.transcribe("src/test_data/test.mp3", None).unwrap();
     let text = result.get_text();
     let start = result.get_start_timestamp();
     let end = result.get_end_timestamp();
+
     println!("start[{}]-end[{}] {}", start, end, text);
 }
 ```
