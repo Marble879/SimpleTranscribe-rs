@@ -1,5 +1,6 @@
 use simple_transcribe_rs::model_handler;
 use simple_transcribe_rs::transcriber;
+use whisper_rs::FullParams;
 use whisper_rs::SamplingStrategy;
 
 #[tokio::main]
