@@ -16,7 +16,7 @@ exclude = [".github"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-whisper-rs = "0.10.0"
+whisper-rs = "0.14.4"
 reqwest = "0.12.22"
 tokio = {version = "1.35.1", features = ["full"]}
 phf = {version = "0.12.1", features = ["macros"]}
