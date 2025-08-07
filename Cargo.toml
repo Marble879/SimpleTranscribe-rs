@@ -17,7 +17,7 @@ exclude = [".github"]
 
 [dependencies]
 whisper-rs = "0.10.0"
-reqwest = "0.11.23"
+reqwest = "0.12.22"
 tokio = {version = "1.35.1", features = ["full"]}
 phf = {version = "0.12.1", features = ["macros"]}
 symphonia = {version = "0.5.3", features=["mp3"]}
